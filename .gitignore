@@ -128,3 +128,12 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# ignore all node_modules
+node_modules/*
+
+# ignore config file
+config/config.env
+
+
