@@ -101,7 +101,7 @@ const sendTokenResponse = (user, statusCode, res) => {
 //get current loggen in user
 //route POST /api/v1/auth/me
 //access private
-exports.getMe = async (req, res, next) => {
+exports.getLoggedInUser = async (req, res, next) => {
     const user = await User.findById(req.user.id);
     res.status(200).json(
         {
@@ -110,3 +110,47 @@ exports.getMe = async (req, res, next) => {
         }
     )
 }
+
+//Get all users
+exports.getUsers= async(req,res,next) =>{
+    try{
+        const jobs = await User.find();
+        res.status(200).json({success:true,count : jobs.length,data : jobs});
+    }catch(err){
+        res.status(400).json({success:false});
+    }
+    
+}
+exports.updateUser= async (req, res, next) => {
+    console.log("inside update user")
+    // res.status(200).json({success: true, msg: 'Update hospitals ' + req.params.id}); 
+    try{
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
+
+        if(!user){
+            return res.status(400).json({success: false});
+        }
+
+        res.status(200).json({success: true, data: user});
+    }catch(err){
+        res.status(400).json({success: false});
+    }
+};
+
+exports.deleteUser= async (req, res, next) => {
+    // res.status(200).json({success: true, msg: 'Delete hospitals ' + req.params.id}); 
+    try{
+        const user = await User.findByIdAndDelete(req.params.id);
+
+        if(!user){
+            return res.status(400).json({success: false});
+        }
+
+        res.status(200).json({success: true, data: {}});
+    }catch(err){
+        res.status(400).json({success: false});
+    }
+};
