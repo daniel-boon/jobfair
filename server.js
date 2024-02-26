@@ -20,9 +20,12 @@ app.use(cookieParser());
 //Route files
 const jobs = require ('./routes/jobs');
 const auth = require('./routes/auth');
+const companies = require('./routes/companies'); //Import companies route
 
-app.use('/api/v1/jobs',jobs)
+app.use('/api/v1/jobs',jobs);
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/companies',companies); //Use companie route
+
 
 const PORT = process.env.PORT || 2000;
 const server = app.listen(PORT,console.log('Server running in ',process.env.NODE_ENV,'mode on port',PORT));
