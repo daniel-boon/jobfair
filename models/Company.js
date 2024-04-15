@@ -1,18 +1,22 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const CompanySchema = new mongoose.Schema({
-    companyName :{
-        type : String,
-        required : [true , 'please add a company name']
-    },
-    description :{
-        type : String , 
-        required : [true , 'Please add a description']
-    },
-    image: {
-        type: Buffer,
-        required: [true, 'Please add a picture']
-    }
+  companyName: {
+    type: String,
+    required: [true, "please add a company name"],
+  },
+  companyPhone: {
+    type: String,
+    required: [true, "Please add a company phone number"],
+  },
+  companyDescription: {
+    type: String,
+    required: [true, "Please add a company description "],
+  },
+  picture: {
+    type: Buffer,
+    required: false,
+  },
 });
 
-module.exports = mongoose.model('Company',CompanySchema);
+module.exports = mongoose.model("Company", CompanySchema);
