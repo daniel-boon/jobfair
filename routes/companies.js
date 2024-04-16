@@ -1,6 +1,5 @@
 const express = require("express");
 const {
-  register,
   getCompanies,
   getCompany,
   createCompany,
@@ -13,22 +12,19 @@ const router = express.Router();
 // Middleware to protect routes
 const { protect } = require("../middleware/auth");
 
-// POST to register a company (assuming no need for authentication)
-router.post("/register", register);
-
 // GET all companies (Public access)
-router.get("/", getCompanies);
+router.get("/getCompanies", getCompanies);
 
 // GET a single company by ID (Public access)
-router.get("/:id", getCompany);
+router.get("/getCompany/:id", getCompany);
 
 // POST a new company (Protected)
-router.post("/", protect, createCompany);
-
+// router.post("/createCompany", protect, createCompany);
+router.post("/createCompany", createCompany);
 // PUT to update a company by ID (Protected)
-router.put("/:id", protect, updateCompany);
-
+// router.put("/updateCompany/:id", protect, updateCompany);
+router.put("/updateCompany/:id", updateCompany);
 // DELETE a company by ID (Protected)
-router.delete("/:id", protect, deleteCompany);
-
+// router.delete("/deleteCompany/:id", protect, deleteCompany);
+router.delete("/deleteCompany/:id", deleteCompany);
 module.exports = router;

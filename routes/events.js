@@ -1,6 +1,5 @@
 const express = require("express");
 const {
-  register,
   getEvents,
   getEvent,
   createEvent,
@@ -13,22 +12,19 @@ const router = express.Router();
 // Middleware to protect routes
 const { protect } = require("../middleware/auth");
 
-// Register an event (assuming this means creating an event, might need protection)
-router.post("/register", protect, register);
-
 // Get all events (Public access)
-router.get("/", getEvents);
+router.get("/getEvents", getEvents);
 
 // Get a single event by ID (Public access)
-router.get("/:id", getEvent);
+router.get("/getEvent/:id", getEvent);
 
 // Create a new event (Protected)
-router.post("/", protect, createEvent);
+router.post("/createEvent", protect, createEvent);
 
 // Update an event by ID (Protected)
-router.put("/:id", protect, updateEvent);
+router.put("/updateEvent/:id", protect, updateEvent);
 
 // Delete an event by ID (Protected)
-router.delete("/:id", protect, deleteEvent);
+router.delete("/deleteEvent/:id", protect, deleteEvent);
 
 module.exports = router;
