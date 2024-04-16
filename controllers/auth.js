@@ -28,10 +28,10 @@ exports.register = async (req, res, next) => {
 
 //Login users
 exports.login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { emailAddress, password } = req.body;
 
   //validate email&password has been entered
-  if (!email || !password) {
+  if (!emailAddress || !password) {
     return res.status(400).json({
       success: false,
       msg: "Please provide an email and password",
@@ -39,7 +39,7 @@ exports.login = async (req, res, next) => {
   }
 
   //Check for user
-  const user = await User.findOne({ email }).select("+password");
+  const user = await User.findOne({ emailAddress }).select("+password");
 
   if (!user) {
     return res.status(400).json({

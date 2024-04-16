@@ -2,7 +2,7 @@ const Company = require("../models/Company");
 
 exports.register = async (req, res, next) => {
   try {
-    const { eventTitle, eventDescription, jobs, slot, companyID } = req.body;
+    const { companyName, companyPhone, companyDescription, picture } = req.body;
 
     //create user
     const company = await Company.create({
@@ -11,6 +11,7 @@ exports.register = async (req, res, next) => {
       companyDescription,
       picture,
     });
+    
   } catch (err) {
     res.status(400).json({ success: false });
     console.log(err.stack);
