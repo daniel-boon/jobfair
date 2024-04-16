@@ -4,14 +4,12 @@ exports.register = async (req, res, next) => {
   try {
     const { companyName, companyPhone, companyDescription, picture } = req.body;
 
-    //create user
     const company = await Company.create({
       companyName,
       companyPhone,
       companyDescription,
       picture,
     });
-    
   } catch (err) {
     res.status(400).json({ success: false });
     console.log(err.stack);

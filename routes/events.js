@@ -19,12 +19,14 @@ router.get("/getEvents", getEvents);
 router.get("/getEvent/:id", getEvent);
 
 // Create a new event (Protected)
-router.post("/createEvent", protect, createEvent);
+// router.post("/createEvent", protect, createEvent);
+router.post("/createEvent", createEvent);
 
 // Update an event by ID (Protected)
-router.put("/updateEvent/:id", protect, updateEvent);
-
+// router.put("/updateEvent/:id", protect, updateEvent);
+router.put("/updateEvent/:id", updateEvent);
 // Delete an event by ID (Protected)
-router.delete("/deleteEvent/:id", protect, deleteEvent);
+// router.delete("/deleteEvent/:id", protect, deleteEvent);
+router.delete("/deleteEvent/:id", deleteEvent);
 
 module.exports = router;

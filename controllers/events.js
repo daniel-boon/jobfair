@@ -4,7 +4,6 @@ exports.register = async (req, res, next) => {
   try {
     const { eventTitle, eventDescription, jobs, slot, companyID } = req.body;
 
-    //create user
     const event = await Event.create({
       eventTitle,
       eventDescription,
@@ -35,22 +34,14 @@ exports.getEvents = async (req, res, next) => {
 //@access Public
 exports.getEvent = async (req, res, next) => {
   try {
-    const Event = await Event.findById(req.params.id);
+    const event = await Event.findById(req.params.id);
 
     if (!Event) return res.status(400).json({ success: false });
 
-    res.status(200).json({ success: true, data: Event });
+    res.status(200).json({ success: true, data: event });
   } catch (err) {
     res.status(400).json({ success: false });
   }
-};
-
-//@desc Create a events
-//@route POST /api/v1/events
-//@access Private
-exports.createEvent = async (req, res, next) => {
-  const Event = await Event.create(req.body);
-  res.status(201).json({ success: true, data: Event });
 };
 
 //@desc Update single Event
@@ -58,26 +49,38 @@ exports.createEvent = async (req, res, next) => {
 //@access Private
 exports.updateEvent = async (req, res, next) => {
   try {
-    const Event = await Event.findByIdAndUpdate(req.params.id, req.body, {
+    const event = await Event.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
     if (!Event) return res.status(400).json({ success: false });
 
-    res.status(200).json({ success: true, data: Event });
+    res.status(200).json({ success: true, data: event });
   } catch (err) {
     res.status(400).json({ success: false });
   }
 };
 
 //@desc Delete single Event
-//@route DELETE /api/v1/events/:id
+//@route DELETE /api/v1/events/:ids
 //@access Private
 exports.deleteEvent = async (req, res, next) => {
   try {
-    const Event = await Event.findByIdAndDelete(req.params.id);
+    const event = await Event.findByIdAndDelete(req.params.id);
     if (!Event) res.status(400).json({ success: false });
     res.status(200).json({ success: true, data: [] });
+  } catch (err) {
+    res.status(400).json({ success: false });
+  }
+};
+
+//@desc Create a Event
+//@route POST /api/v1/events
+//@access Private
+exports.createEvent = async (req, res, next) => {
+  try {
+    const event = await Event.create(req.body);
+    res.status(201).json({ success: true, data: event });
   } catch (err) {
     res.status(400).json({ success: false });
   }
