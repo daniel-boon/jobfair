@@ -123,9 +123,20 @@ exports.getUserById = async (req, res, next) => {
           });
       }
 
+      // Base64 encode the picture and resume if they exist
+      const pictureBase64 = user.picture ? user.picture.toString('base64') : null;
+      const resumeBase64 = user.resume ? user.resume.toString('base64') : null;
+
+      // Add the encoded fields to the user data to be returned
+      const userData = {
+        ...user.toObject(),
+        picture: pictureBase64,
+        resume: resumeBase64
+      };
+
       res.status(200).json({
           success: true,
-          data: user
+          data: userData
       });
   } catch (err) {
       res.status(400).json({
@@ -135,6 +146,7 @@ exports.getUserById = async (req, res, next) => {
       console.error(err.stack);
   }
 };
+
 
 exports.updateUser = async (req, res, next) => {
   try {
