@@ -25,24 +25,24 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please add a password"],
     minLength: 6,
-    select: false,
+    // select: false,
   },
   telPhone: {
     type: String,
     required: [true, "Please add a telPhone number"],
     minLength: 9,
-    select: false,
+    // select: false,
   },
 
   picture: {
     type: String,
     required: false,
-    select: false,
+    // select: false,
   },
   resume: {
     type: Buffer,
     required: false,
-    select: false,
+    // select: false,
   },
 
   resetPasswordToken: String,
