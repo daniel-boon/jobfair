@@ -6,11 +6,20 @@ const {
   getUsers,
   updateUser,
   deleteUser,
+  getUserById,
+  testUpload
 } = require("../controllers/auth");
 
 const router = express.Router();
 
 const { protect } = require("../middleware/auth");
+
+// const multer = require('multer');
+
+// Configure multer to store files in memory
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
+
 
 //POST {{URL}}/api/v1/auth/register
 router.post("/register", register);
@@ -24,6 +33,12 @@ router.get("/getLoggedInUser", protect, getLoggedInUser);
 //GET {{URL}}/api/v1/auth/users
 router.get("/users", getUsers);
 
-router.route("/user/:id").put(updateUser).delete(deleteUser);
+router.route("/user/:id").delete(deleteUser).get(getUserById);
+
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+router.put('/user/:id', upload.any(), updateUser);
+
 
 module.exports = router;

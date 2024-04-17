@@ -110,24 +110,83 @@ exports.getUsers = async (req, res, next) => {
     res.status(400).json({ success: false });
   }
 };
-exports.updateUser = async (req, res, next) => {
-  console.log("inside update user");
-  // res.status(200).json({success: true, msg: 'Update hospitals ' + req.params.id});
+
+// Get one user by user ID
+exports.getUserById = async (req, res, next) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      const user = await User.findById(req.params.id);
+
+      if (!user) {
+          return res.status(404).json({
+              success: false,
+              msg: 'User not found'
+          });
+      }
+
+      res.status(200).json({
+          success: true,
+          data: user
+      });
+  } catch (err) {
+      res.status(400).json({
+          success: false,
+          msg: 'Error fetching user'
+      });
+      console.error(err.stack);
+  }
+};
+
+
+// exports.updateUser = async (req, res, next) => {
+//   // res.status(200).json({success: true, msg: 'Update hospitals ' + req.params.id});
+//   try {
+//     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+//       new: true,
+//       runValidators: true,
+//     });
+
+//     if (!user) {
+//       return res.status(400).json({ success: false });
+//     }
+
+//     res.status(200).json({ success: true, data: user });
+//   } catch (err) {
+//     res.status(400).json({ success: false });
+//   }
+// };
+
+exports.updateUser = async (req, res, next) => {
+  try {
+    const updateData = { ...req.body };
+
+    if (req.files) {
+      req.files.forEach(file => {
+        if (file.mimetype.startsWith('image/') && !updateData.picture) {
+          // Assuming the first image file encountered is the picture
+          updateData.picture = file.buffer;
+        } else if (file.mimetype === 'application/pdf' && !updateData.resume) {
+          // Assuming the first PDF file encountered is the resume
+          updateData.resume = file.buffer;
+        }
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true,
     });
 
     if (!user) {
-      return res.status(400).json({ success: false });
+      return res.status(404).json({ success: false, msg: 'User not found' });
     }
 
     res.status(200).json({ success: true, data: user });
   } catch (err) {
+    console.error('Error updating user:', err);
     res.status(400).json({ success: false });
   }
 };
+
 
 exports.deleteUser = async (req, res, next) => {
   // res.status(200).json({success: true, msg: 'Delete hospitals ' + req.params.id});
@@ -143,3 +202,4 @@ exports.deleteUser = async (req, res, next) => {
     res.status(400).json({ success: false });
   }
 };
+

@@ -35,10 +35,10 @@ const UserSchema = new mongoose.Schema({
   },
 
   picture: {
-    type: String,
-    required: false,
-    // select: false,
+    type: Buffer,
+    required: false
   },
+  
   resume: {
     type: Buffer,
     required: false,
