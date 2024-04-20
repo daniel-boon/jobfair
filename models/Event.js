@@ -14,20 +14,26 @@ const EventSchema = new mongoose.Schema({
     required: [true, "Please add a jobs position"],
   },
   slot: {
-    type: [{
-      startTime: {
-        type: String,
-        required: [true, "Please add a start time for the slot"]
+    type: [
+      {
+        date: {
+          type: String,
+          required: [true, "Please add a date for the slot"],
+        },
+        startTime: {
+          type: String,
+          required: [true, "Please add a start time for the slot"],
+        },
+        endTime: {
+          type: String,
+          required: [true, "Please add an end time for the slot"],
+        },
+        label: {
+          type: String,
+          required: [true, "Please add a label for the slot"],
+        },
       },
-      endTime: {
-        type: String,
-        required: [true, "Please add an end time for the slot"]
-      },
-      label: {
-        type: String,
-        required: [true, "Please add a label for the slot"]
-      }
-    }],  // Inline sub-schema for time slots
+    ], // Inline sub-schema for time slots
     required: [true, "Please add slots for interviews"],
   },
   companyID: {
