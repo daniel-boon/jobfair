@@ -1,5 +1,3 @@
-// controller eventsCompanies.js
-
 const Company = require("../models/Company");
 const Event = require("../models/Event");
 
