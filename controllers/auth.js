@@ -114,50 +114,49 @@ exports.getUsers = async (req, res, next) => {
 // Get one user by user ID
 exports.getUserById = async (req, res, next) => {
   try {
-      const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id);
 
-      if (!user) {
-          return res.status(404).json({
-              success: false,
-              msg: 'User not found'
-          });
-      }
-
-      // Base64 encode the picture and resume if they exist
-      const pictureBase64 = user.picture ? user.picture.toString('base64') : null;
-      const resumeBase64 = user.resume ? user.resume.toString('base64') : null;
-
-      // Add the encoded fields to the user data to be returned
-      const userData = {
-        ...user.toObject(),
-        picture: pictureBase64,
-        resume: resumeBase64
-      };
-
-      res.status(200).json({
-          success: true,
-          data: userData
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        msg: "User not found",
       });
+    }
+
+    // Base64 encode the picture and resume if they exist
+    const pictureBase64 = user.picture ? user.picture.toString("base64") : null;
+    const resumeBase64 = user.resume ? user.resume.toString("base64") : null;
+
+    // Add the encoded fields to the user data to be returned
+    const userData = {
+      ...user.toObject(),
+      picture: pictureBase64,
+      resume: resumeBase64,
+    };
+
+    res.status(200).json({
+      success: true,
+      data: userData,
+    });
   } catch (err) {
-      res.status(400).json({
-          success: false,
-          msg: 'Error fetching user'
-      });
-      console.error(err.stack);
+    res.status(400).json({
+      success: false,
+      msg: "Error fetching user",
+    });
+    console.error(err.stack);
   }
 };
-
 
 exports.updateUser = async (req, res, next) => {
   try {
     const updateData = { ...req.body };
 
     if (req.files) {
-      req.files.forEach(file => {
-        if (file.mimetype.startsWith('image/') && !updateData.picture) {
+      req.files.forEach((file) => {
+        if (file.mimetype.startsWith("image/") && !updateData.picture) {
           // Assuming the first image file encountered is the picture
           updateData.picture = file.buffer;
-        } else if (file.mimetype === 'application/pdf' && !updateData.resume) {
+        } else if (file.mimetype === "application/pdf" && !updateData.resume) {
           // Assuming the first PDF file encountered is the resume
           updateData.resume = file.buffer;
         }
@@ -170,16 +169,15 @@ exports.updateUser = async (req, res, next) => {
     });
 
     if (!user) {
-      return res.status(404).json({ success: false, msg: 'User not found' });
+      return res.status(404).json({ success: false, msg: "User not found" });
     }
 
     res.status(200).json({ success: true, data: user });
   } catch (err) {
-    console.error('Error updating user:', err);
+    console.error("Error updating user:", err);
     res.status(400).json({ success: false });
   }
 };
-
 
 exports.deleteUser = async (req, res, next) => {
   // res.status(200).json({success: true, msg: 'Delete hospitals ' + req.params.id});
@@ -196,3 +194,30 @@ exports.deleteUser = async (req, res, next) => {
   }
 };
 
+exports.updateUserResume = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const resumeUpdates = req.body;
+
+    // Find the user by ID and update the resume field
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: { resume: resumeUpdates } },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({ success: true, data: updatedUser.resume });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error updating resume",
+      error: error.toString(),
+    });
+  }
+};

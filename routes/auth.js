@@ -7,7 +7,8 @@ const {
   updateUser,
   deleteUser,
   getUserById,
-  testUpload
+  testUpload,
+  updateUserResume,
 } = require("../controllers/auth");
 
 const router = express.Router();
@@ -20,7 +21,6 @@ const { protect } = require("../middleware/auth");
 // const storage = multer.memoryStorage();
 // const upload = multer({ storage: storage });
 
-
 //POST {{URL}}/api/v1/auth/register
 router.post("/register", register);
 
@@ -30,15 +30,17 @@ router.post("/login", login);
 //GET {{URL}}/api/v1/auth/getLoggedInUser
 router.get("/getLoggedInUser", protect, getLoggedInUser);
 
+// Route to update user's resume
+router.patch("/resume/:userId", updateUserResume);
+
 //GET {{URL}}/api/v1/auth/users
 router.get("/users", getUsers);
 
 router.route("/user/:id").delete(deleteUser).get(getUserById);
 
-const multer = require('multer');
+const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-router.put('/user/:id', upload.any(), updateUser);
-
+router.put("/user/:id", upload.any(), updateUser);
 
 module.exports = router;

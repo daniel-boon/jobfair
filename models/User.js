@@ -40,9 +40,9 @@ const UserSchema = new mongoose.Schema({
   },
 
   resume: {
-    type: Buffer,
+    type: Object,
     required: false,
-    // select: false,
+    // select: false
   },
 
   resetPasswordToken: String,
