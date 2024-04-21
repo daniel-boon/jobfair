@@ -24,6 +24,7 @@ const companies = require("./routes/companies");
 const bookings = require("./routes/bookings");
 const eventsCompanies = require("./routes/eventsCompanies");
 const bookingDetailsRoutes = require("./routes/bookingsEventsCompanies");
+const adminCompanyRoutes = require("./routes/adminCompany");
 
 app.use("/api/v1/events", events);
 app.use("/api/v1/auth", auth);
@@ -31,6 +32,7 @@ app.use("/api/v1/companies", companies);
 app.use("/api/v1/bookings", bookings);
 app.use("/api/v1/events", eventsCompanies);
 app.use("/api/v1/bookingDetails", bookingDetailsRoutes);
+app.use("/api/v1/admin", adminCompanyRoutes);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(
