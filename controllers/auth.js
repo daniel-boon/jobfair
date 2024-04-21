@@ -28,44 +28,43 @@ exports.register = async (req, res, next) => {
 
 //Login users
 exports.login = async (req, res, next) => {
-  const { emailAddress, password } = req.body;
+  try {
+    const { emailAddress, password } = req.body;
 
-  //validate email&password has been entered
-  if (!emailAddress || !password) {
-    return res.status(400).json({
-      success: false,
-      msg: "Please provide an email and password",
-    });
-  }
+    //Validate emailAddress & password
+    if (!emailAddress || !password) {
+      return res.status(400).json({
+        success: false,
+        msg: "Please provide an emailAddress and password",
+      });
+    }
+    //check for user
+    const user = await User.findOne({ emailAddress }).select("+password");
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, msg: "Invalid credentials" });
+    }
 
-  //Check for user
-  const user = await User.findOne({ emailAddress }).select("+password");
+    //Check if password matches
+    const isMatch = await user.matchPassword(password);
 
-  if (!user) {
-    return res.status(400).json({
-      success: false,
-      msg: "Invalid credentials",
-    });
-  }
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ success: false, msg: "Invalid credentials" });
+    }
 
-  //Check if password matches
-  const isMatch = await user.matchPassword(password);
-
-  if (!isMatch) {
+    //Create token
+    //const token = user.getSignedJwtToken();
+    //res.status(200).json({success : true,token});
+    sendTokenResponse(user, 200, res);
+  } catch (err) {
     return res.status(401).json({
       success: false,
-      msg: "Invalid credentials",
+      msg: "Cannot convert emailAddress or password to string",
     });
   }
-
-  //Create token
-  // const token = user.getSignedJwtToken();
-
-  // res.status(200).json({
-  //     success: true,
-  //     token
-  // });
-  sendTokenResponse(user, 200, res);
 };
 
 //Get token from model, create cookie and send response
@@ -192,6 +191,21 @@ exports.deleteUser = async (req, res, next) => {
   } catch (err) {
     res.status(400).json({ success: false });
   }
+};
+
+//@desc Log user out / clear cookie
+//@route GET/api/v1/auth/logout
+//@access Private
+exports.logout = async (req, res, next) => {
+  res.cookie("token", "none", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
 };
 
 exports.updateUserResume = async (req, res) => {

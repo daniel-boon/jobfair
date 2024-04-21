@@ -9,6 +9,7 @@ const {
   getUserById,
   testUpload,
   updateUserResume,
+  logout,
 } = require("../controllers/auth");
 
 const router = express.Router();
@@ -37,6 +38,7 @@ router.patch("/resume/:userId", updateUserResume);
 router.get("/users", getUsers);
 
 router.route("/user/:id").delete(deleteUser).get(getUserById);
+router.get("/logout", logout);
 
 const multer = require("multer");
 const storage = multer.memoryStorage();
