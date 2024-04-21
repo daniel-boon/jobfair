@@ -1,4 +1,5 @@
 const Booking = require("../models/Booking");
+const User = require("../models/User");
 
 // @desc Add a booking
 // @route POST /api/v1/bookings
@@ -6,15 +7,35 @@ const Booking = require("../models/Booking");
 exports.addBooking = async (req, res, next) => {
   try {
     const { userID, eventID } = req.body;
-    const booking = await Booking.create({
-      userID,
-      eventID,
-    });
 
+    // Fetch user to check their role
+    const user = await User.findById(userID);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (user.role === "user") {
+      // Count user's existing bookings if they are not an admin
+      const bookingCount = await Booking.countDocuments({ userID });
+      if (bookingCount >= 3) {
+        return res.status(400).json({
+          success: false,
+          message: "User cannot book more than 3 times",
+        });
+      }
+    }
+
+    // Create booking
+    const booking = await Booking.create({ userID, eventID });
     res.status(201).json({ success: true, data: booking });
   } catch (err) {
-    res.status(400).json({ success: false });
-    console.log(err.stack);
+    console.error(err); // Log the full error
+    res.status(500).json({
+      success: false,
+      message: err.message || "An error occurred while creating the booking",
+    });
   }
 };
 
