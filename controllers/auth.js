@@ -158,8 +158,12 @@ exports.updateUser = async (req, res, next) => {
     user.role = req.body.role || user.role;
 
     // Handle picture update
-    if (req.file) {  // Assuming multer middleware named the file field 'picture'
-      user.picture = req.file.buffer;
+    if (req.files) {
+      req.files.forEach((file) => {
+        if (file.mimetype.startsWith("image/")) {
+          user.picture = file.buffer;
+        }
+      });
     }
 
     // Update resume with new job experiences
