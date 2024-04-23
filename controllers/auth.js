@@ -145,44 +145,34 @@ exports.getUserById = async (req, res, next) => {
 };
 
 exports.updateUser = async (req, res, next) => {
-  console.log(req)
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ success: false, msg: "User not found" });
     }
 
-    // Update user fields
+    // Update basic user fields
     user.name = req.body.name || user.name;
     user.emailAddress = req.body.emailAddress || user.emailAddress;
     user.telPhone = req.body.telPhone || user.telPhone;
     user.role = req.body.role || user.role;
 
     // Handle picture update
-    if (req.files) {
-      req.files.forEach((file) => {
-        if (file.mimetype.startsWith("image/")) {
-          user.picture = file.buffer;
-        }
-      });
+    if (req.file) {  // Assuming multer middleware named the file field 'picture'
+      user.picture = req.file.buffer;
     }
 
     // Update resume with new job experiences
     if (req.body.resume) {
-      // Assuming resume is sent as an array of job experiences
-      if (Array.isArray(req.body.resume)) {
-        user.resume = [...user.resume, ...req.body.resume];
-      } else {
-        user.resume.push(req.body.resume);  // if it's a single job experience object
-      }
+      // Expect resume data as a plain string
+      user.resume = req.body.resume;  // Directly assign the string
     }
 
     await user.save();  // Save the updated document
-
     res.status(200).json({ success: true, data: user });
   } catch (err) {
     console.error("Error updating user:", err);
-    res.status(400).json({ success: false });
+    res.status(400).json({ success: false, message: err.message });
   }
 };
 
