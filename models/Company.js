@@ -17,10 +17,10 @@ const CompanySchema = new mongoose.Schema({
     type: String,
     required: [true, "Please add a company description "],
   },
-  picture: {
-    type: Buffer,
-    required: false,
-  },
+  // picture: {
+  //   type: Buffer,
+  //   required: false,
+  // },
 });
 
 module.exports = mongoose.model("Company", CompanySchema);

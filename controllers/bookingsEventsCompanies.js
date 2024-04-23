@@ -42,9 +42,6 @@ exports.getBookingDetailsByUser = async (req, res, next) => {
               name: company.companyName,
               phone: company.companyPhone,
               description: company.companyDescription,
-              picture: company.picture
-                ? `data:image/png;base64,${company.picture.toString("base64")}`
-                : null,
             },
           };
         } catch (error) {

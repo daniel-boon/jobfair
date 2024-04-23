@@ -23,9 +23,6 @@ exports.getEventWithCompany = async (req, res) => {
         jobs: event.jobs,
         slots: event.slot,
       },
-      companyPicture: company.picture
-        ? `data:image/jpeg;base64,${company.picture.toString("base64")}`
-        : null,
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
