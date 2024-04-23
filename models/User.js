@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Schema = mongoose.Schema;
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -39,11 +40,7 @@ const UserSchema = new mongoose.Schema({
     required: false,
   },
 
-  resume: {
-    type: Object,
-    required: false,
-    // select: false
-  },
+  resume: [String],
 
   resetPasswordToken: String,
   resetPasswordExpire: Date,

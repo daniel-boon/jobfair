@@ -2,7 +2,7 @@ const User = require("../models/User");
 
 exports.register = async (req, res, next) => {
   try {
-    const { name, emailAddress, password, telPhone, picture, role, resume } =
+    const { name, emailAddress, password, telPhone, role } =
       req.body;
 
     //create user
@@ -11,15 +11,12 @@ exports.register = async (req, res, next) => {
       emailAddress,
       password,
       telPhone,
-      picture,
-      role,
-      resume,
+      role
     });
 
     //Create token
     // const token = user.getSignedJwtToken();
-    // res.status(200).json({success: true, token});
-    sendTokenResponse(user, 200, res);
+    res.status(200).json({success: true, user});
   } catch (err) {
     res.status(400).json({ success: false });
     console.log(err.stack);
@@ -98,6 +95,7 @@ exports.getLoggedInUser = async (req, res, next) => {
     success: true,
     data: user,
   });
+  console.log('get logged in', user)
 };
 
 //Get all users
@@ -147,29 +145,39 @@ exports.getUserById = async (req, res, next) => {
 };
 
 exports.updateUser = async (req, res, next) => {
+  console.log(req)
   try {
-    const updateData = { ...req.body };
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ success: false, msg: "User not found" });
+    }
 
+    // Update user fields
+    user.name = req.body.name || user.name;
+    user.emailAddress = req.body.emailAddress || user.emailAddress;
+    user.telPhone = req.body.telPhone || user.telPhone;
+    user.role = req.body.role || user.role;
+
+    // Handle picture update
     if (req.files) {
       req.files.forEach((file) => {
-        if (file.mimetype.startsWith("image/") && !updateData.picture) {
-          // Assuming the first image file encountered is the picture
-          updateData.picture = file.buffer;
-        } else if (file.mimetype === "application/pdf" && !updateData.resume) {
-          // Assuming the first PDF file encountered is the resume
-          updateData.resume = file.buffer;
+        if (file.mimetype.startsWith("image/")) {
+          user.picture = file.buffer;
         }
       });
     }
 
-    const user = await User.findByIdAndUpdate(req.params.id, updateData, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!user) {
-      return res.status(404).json({ success: false, msg: "User not found" });
+    // Update resume with new job experiences
+    if (req.body.resume) {
+      // Assuming resume is sent as an array of job experiences
+      if (Array.isArray(req.body.resume)) {
+        user.resume = [...user.resume, ...req.body.resume];
+      } else {
+        user.resume.push(req.body.resume);  // if it's a single job experience object
+      }
     }
+
+    await user.save();  // Save the updated document
 
     res.status(200).json({ success: true, data: user });
   } catch (err) {
@@ -177,6 +185,7 @@ exports.updateUser = async (req, res, next) => {
     res.status(400).json({ success: false });
   }
 };
+
 
 exports.deleteUser = async (req, res, next) => {
   // res.status(200).json({success: true, msg: 'Delete hospitals ' + req.params.id});
