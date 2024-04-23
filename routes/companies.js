@@ -5,6 +5,8 @@ const {
   createCompany,
   updateCompany,
   deleteCompany,
+  getCompanyByPhone,
+  getCompanyInfoByUserId
 } = require("../controllers/companies");
 
 const router = express.Router();
@@ -27,4 +29,6 @@ router.put("/updateCompany/:id", updateCompany);
 // DELETE a company by ID (Protected)
 // router.delete("/deleteCompany/:id", protect, deleteCompany);
 router.delete("/deleteCompany/:id", deleteCompany);
+router.get('/phone/:phone', getCompanyByPhone);
+router.get('/getCompanyInfoByUserId/:userId', getCompanyInfoByUserId);
 module.exports = router;
