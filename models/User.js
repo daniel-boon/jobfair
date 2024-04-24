@@ -39,7 +39,10 @@ const UserSchema = new mongoose.Schema({
     required: false,
   },
 
-  resume: String,
+  resume: {
+    type: String,
+    default: "No Work Experience Added." // Default resume value
+  },
 
   resetPasswordToken: String,
   resetPasswordExpire: Date,

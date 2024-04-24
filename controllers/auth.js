@@ -95,6 +95,8 @@ exports.login = async (req, res, next) => {
       success: true,
       token: token,
       name: user.name,
+      emailAddress: user.emailAddress,
+      telPhone: user.telPhone,
       userId: user._id,
       role: user.role
     });
@@ -138,7 +140,7 @@ exports.getLoggedInUser = async (req, res, next) => {
     success: true,
     data: user,
   });
-  console.log('get logged in', user)
+  // console.log('get logged in', user)
 };
 
 //Get all users

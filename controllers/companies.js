@@ -106,7 +106,7 @@ exports.getCompanyByPhone = async (req, res, next) => {
 exports.getCompanyInfoByUserId = async (req, res, next) => {
   try {
       const userId = req.params.userId; // Correctly capture the userId from request parameters
-      console.log('user id', userId)
+      // console.log('user id', userId)
       // Find the user by ID
       const user = await User.findById(userId);
       if (!user) {
