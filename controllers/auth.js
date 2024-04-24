@@ -5,7 +5,7 @@ exports.register = async (req, res, next) => {
     const { name, emailAddress, password, telPhone, role } =
       req.body;
 
-    //create user
+    // user
     const user = await User.create({
       name,
       emailAddress,
@@ -24,45 +24,88 @@ exports.register = async (req, res, next) => {
 };
 
 //Login users
+// exports.login = async (req, res, next) => {
+//   try {
+//     const { emailAddress, password } = req.body;
+
+//     //Validate emailAddress & password
+//     if (!emailAddress || !password) {
+//       return res.status(400).json({
+//         success: false,
+//         msg: "Please provide an emailAddress and password",
+//       });
+//     }
+//     //check for user
+//     const user = await User.findOne({ emailAddress }).select("+password");
+//     if (!user) {
+//       return res
+//         .status(400)
+//         .json({ success: false, msg: "Invalid credentials" });
+//     }
+
+//     //Check if password matches
+//     const isMatch = await user.matchPassword(password);
+
+//     if (!isMatch) {
+//       return res
+//         .status(401)
+//         .json({ success: false, msg: "Invalid credentials" });
+//     }
+
+//     //Create token
+//     //const token = user.getSignedJwtToken();
+//     //res.status(200).json({success : true,token});
+//     sendTokenResponse(user, 200, res);
+//   } catch (err) {
+//     return res.status(401).json({
+//       success: false,
+//       msg: "Cannot convert emailAddress or password to string",
+//     });
+//   }
+// };
 exports.login = async (req, res, next) => {
   try {
     const { emailAddress, password } = req.body;
 
-    //Validate emailAddress & password
+    // Validate emailAddress & password
     if (!emailAddress || !password) {
       return res.status(400).json({
         success: false,
-        msg: "Please provide an emailAddress and password",
+        msg: "Please provide an email address and password"
       });
     }
-    //check for user
+
+    // Check for user
     const user = await User.findOne({ emailAddress }).select("+password");
     if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, msg: "Invalid credentials" });
+      return res.status(400).json({ success: false, msg: "Invalid credentials" });
     }
 
-    //Check if password matches
+    // Check if password matches
     const isMatch = await user.matchPassword(password);
-
     if (!isMatch) {
-      return res
-        .status(401)
-        .json({ success: false, msg: "Invalid credentials" });
+      return res.status(401).json({ success: false, msg: "Invalid credentials" });
     }
 
-    //Create token
-    //const token = user.getSignedJwtToken();
-    //res.status(200).json({success : true,token});
-    sendTokenResponse(user, 200, res);
+    // Create token
+    const token = user.getSignedJwtToken();
+
+    // Include user ID and role in the response
+    res.status(200).json({
+      success: true,
+      token: token,
+      name: user.name,
+      userId: user._id,
+      role: user.role
+    });
   } catch (err) {
-    return res.status(401).json({
+    return res.status(500).json({
       success: false,
-      msg: "Cannot convert emailAddress or password to string",
+      msg: "Server error"
     });
   }
 };
+
 
 //Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
