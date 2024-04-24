@@ -22,15 +22,44 @@ bird004@gmail.com
 
 bird004
 {
-    "_id": "6628c1a72c7a7f04ae685a61",
-    "name": "birdtest",
-    "emailAddress": "bird004@gmail.com",
-    "role": "user",
-    "password": "$2a$10$ydRFvIGmSe4W5VT8hXg2..U3tm9IyQ3zWujlCZUICYtXGmZ0OveuK",
-    "telPhone": "063-458-2317",
-    "resume": "No Work Experience Added.",
-    "createdAt": "2024-04-24T08:24:07.287Z",
-    "__v": 0
+    "success": true,
+    "user": {
+        "name": "birdtest",
+        "emailAddress": "bird004@gmail.com",
+        "password": "$2a$10$8kH.tiAsnryNp2SkMS4LCeO3NXWL0CeSZsK0ryhI03WwRfDrUz1Y.",
+        "telPhone": "123-456-7890",
+        "_id": "66290d9842814e4a5714187f",
+        "__v": 0
+    }
+}
+id "66290e79b505579111564885"
+
+
+{
+    "success": true,
+    "user": {
+        "name": "birdtest",
+        "emailAddress": "bird004@gmail.com",
+        "password": "$2a$10$dfN2Vky1ZKmZ1/WvfL5WOuzM6DB6k6B57fyY506BkFu22xEfOvP6m",
+        "telPhone": "063-458-2317",
+        "_id": "66290b3cbb02dbccc2dc2257",
+        "__v": 0
+    }
+}
+
+{
+    "success": true,
+    "user": {
+        "name": "birdtest",
+        "emailAddress": "bird005@gmail.com",
+        "role": "user",
+        "password": "$2a$10$DVBqfc67nLLi3ZMAuxfNUuyF/zzcrAlloT9MOFUATOU29HVLOtIvi",
+        "telPhone": "063-458-2317",
+        "resume": "No Work Experience Added.",
+        "_id": "6629023606efeadbe0330d3a",
+        "createdAt": "2024-04-24T12:59:34.284Z",
+        "__v": 0
+    }
 }
 
 Company
@@ -149,4 +178,7 @@ Event
         }
     ]
 }
+
+
+
 
