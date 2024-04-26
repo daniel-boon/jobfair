@@ -13,6 +13,14 @@ const CompanySchema = new mongoose.Schema({
     type: String,
     required: [true, "Please add a company description "],
   },
+  companyEmail: {
+    type: String,
+    required: false,
+  },
+  companyWebsite: {
+    type: String,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model("Company", CompanySchema);

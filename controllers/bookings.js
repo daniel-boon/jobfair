@@ -109,6 +109,8 @@ const Event = require("../models/Event");
 //   }
 // };
 exports.addBooking = async (req, res, next) => {
+  console.log(req.body)
+  console.log('test')
   try {
     const { userID, eventID, slotID, jobPosition } = req.body;
 
