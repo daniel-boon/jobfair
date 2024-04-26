@@ -5,7 +5,7 @@ const {
   createEvent,
   updateEvent,
   deleteEvent,
-  getEventsByUserId
+  getEventsByUserId,
 } = require("../controllers/events");
 
 const router = express.Router();
@@ -14,21 +14,21 @@ const router = express.Router();
 const { protect } = require("../middleware/auth");
 
 // Get all events (Public access)
-router.get("/getEvents", getEvents);
+router.get("/getEvents", protect, getEvents);
 
 // Get a single event by ID (Public access)
-router.get("/getEvent/:id", getEvent);
+router.get("/getEvent/:id", protect, getEvent);
 
 // Create a new event (Protected)
 // router.post("/createEvent", protect, createEvent);
-router.post("/createEvent", createEvent);
+router.post("/createEvent", protect, createEvent);
 
 // Update an event by ID (Protected)
 // router.put("/updateEvent/:id", protect, updateEvent);
-router.put("/updateEvent/:id", updateEvent);
+router.put("/updateEvent/:id", protect, updateEvent);
 // Delete an event by ID (Protected)
 // router.delete("/deleteEvent/:id", protect, deleteEvent);
-router.delete("/deleteEvent/:id", deleteEvent);
+router.delete("/deleteEvent/:id", protect, deleteEvent);
 
-router.get('/users/:userId', getEventsByUserId); // New route
+router.get("/users/:userId", protect, getEventsByUserId); // New route
 module.exports = router;
